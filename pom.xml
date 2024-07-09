@@ -8,11 +8,11 @@
 		<version>3.3.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>sc.senai.futuro.dev.tubarao</groupId>
-	<artifactId>lab.receitas</artifactId>
+	<groupId>br.com</groupId>
+	<artifactId>labfoods</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>LabReceitas</name>
-	<description>Projeto LabReceitas - Módulo 3</description>
+	<name>labfoods</name>
+	<description>Projeto módulo 3 - labfoods</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -30,10 +30,6 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
