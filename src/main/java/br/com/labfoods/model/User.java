@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -75,4 +76,11 @@ public class User {
     
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    public User(UUID id, String name, Gender gender, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.active = active;
+    }
 }

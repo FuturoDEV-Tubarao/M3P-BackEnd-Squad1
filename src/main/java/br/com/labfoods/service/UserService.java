@@ -59,6 +59,8 @@ public class UserService {
             LOGGER.info("Saving user");
             user.setCreatedDate(LocalDateTime.now());
 
+            //TODO Verificar regra para usuários existentes, nao funciona desta forma.
+            
             //Não permite cadastrar usuários com o mesmo CPF; 
             boolean cpfInUse = repository.existsByCpf(user.getCpf());
             if(cpfInUse) {

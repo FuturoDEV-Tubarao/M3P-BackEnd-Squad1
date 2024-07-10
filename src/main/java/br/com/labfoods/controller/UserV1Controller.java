@@ -34,12 +34,14 @@ public class UserV1Controller {
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> findAll() {
+    public ResponseEntity<List<User>> findAll() {
         List<User> users = service.findAll();
 
-        List<String> nameList = users.stream().map(User::getName).collect(Collectors.toList());
+        List<User> securityUsers = users.stream()
+            .map(user -> new User(user.getId(), user.getName(), user.getGender(), user.isActive()))
+            .collect(Collectors.toList());
         
-        return ResponseEntity.ok().body(nameList);
+        return ResponseEntity.ok().body(securityUsers);
     }
 
     @PostMapping
@@ -51,13 +53,15 @@ public class UserV1Controller {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody @Valid UserV1Dto dto) {
+    public ResponseEntity<User> update(@PathVariable UUID id, @RequestBody @Valid UserV1Dto dto) {
         User user = service.findById(id);
         user = mapper.map(dto, User.class);
         user.setId(id);
         service.save(user);
 
-        return ResponseEntity.ok().body(user.getName());
+        User securityUser = new User(user.getId(), user.getName(), user.getGender(), user.isActive());
+        
+        return ResponseEntity.ok().body(securityUser);
     }
 
     @DeleteMapping("{id}")
