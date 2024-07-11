@@ -6,37 +6,59 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.com.labfoods.dto.DashboardV1Dto;
 import br.com.labfoods.model.Recipe;
+import br.com.labfoods.model.User;
 import br.com.labfoods.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import br.com.labfoods.service.RecipeService;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/labfoods/v1/dashboard")
 public class DashboardV1Controller {
     
-    private UserService contactService;
+    private UserService userService;
     private RecipeService recipeService;
 
     @Autowired
-    public DashboardV1Controller(UserService contactService, RecipeService recipeService) {
-        this.contactService = contactService;
+    public DashboardV1Controller(UserService userService, RecipeService recipeService) {
+        this.userService = userService;
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    public ResponseEntity<DashboardV1Dto> getDashboard() {
+    @Operation(summary = "Get user list.", tags = "DashboardV1Controller")
+    @GetMapping("users")
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.findAll();
+
+        List<User> securityUsers = users.stream()
+            .map(user -> new User(user.getId(), user.getName(), user.getGender(), user.isActive()))
+            .collect(Collectors.toList());
         
-        int totalContactsActive = contactService.countByActiveTrue();
+        return ResponseEntity.ok().body(securityUsers);
+    }
+
+    @Operation(summary = "Get recipe list.", tags = "DashboardV1Controller")
+    @GetMapping("recipes")
+    public ResponseEntity<List<Recipe>> getRecipes() {
+        List<Recipe> recipes = recipeService.findAll();
+
+        return ResponseEntity.ok().body(recipes);
+    }
+    
+    @Operation(summary = "Get a active users.", tags = "DashboardV1Controller")
+    @GetMapping ("users/active")
+    public ResponseEntity<Integer> getActiveUsers() {        
+        int totalActiveUsers = userService.countByActiveTrue();
+
+        return ResponseEntity.ok().body(totalActiveUsers);
+    }
+
+    @Operation(summary = "Get a total recipes.", tags = "DashboardV1Controller")
+    @GetMapping("recipes/total")
+    public ResponseEntity<Integer> getTotalRecipes() {        
         int totalRecipes = recipeService.countBy();
-        List<Recipe> top3Recipe = recipeService.findTop3Recipes();
 
-        DashboardV1Dto dashboard = DashboardV1Dto.builder()
-            .totalContactUsersActive(totalContactsActive)
-            .totalRecipes(totalRecipes)
-            .top3Recipe(top3Recipe)
-            .build();
-
-        return ResponseEntity.ok().body(dashboard);
+        return ResponseEntity.ok().body(totalRecipes);
     }
 }
