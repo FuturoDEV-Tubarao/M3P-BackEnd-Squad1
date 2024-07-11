@@ -16,10 +16,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    protected static final String[] NO_AUTH = {
-        "/v1/auth",
-        "/api/labfoods/v1/user"
-    };     
+        private static final String[] AUTH_WHITELIST = {
+            "/**",
+            "/api/labfoods/v1/auth*",
+            "/swagger-ui/index.html"
+        };
   
     private CustomBasicAuthenticationFilter customBasicAuthenticationFilter;
 
@@ -33,7 +34,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(request -> request
-                .requestMatchers(NO_AUTH)
+                .requestMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .anyRequest()
                 .authenticated())

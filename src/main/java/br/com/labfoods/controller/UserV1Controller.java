@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.stream.Collectors;
-
 import br.com.labfoods.dto.UserV1Dto;
 import br.com.labfoods.model.User;
 import br.com.labfoods.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -34,6 +34,7 @@ public class UserV1Controller {
     }
 
     @GetMapping
+    @Operation(summary = "Get user list.", tags = "UserV1Controller")
     public ResponseEntity<List<User>> findAll() {
         List<User> users = service.findAll();
 
@@ -43,8 +44,17 @@ public class UserV1Controller {
         
         return ResponseEntity.ok().body(securityUsers);
     }
+        
+    @GetMapping("{id}")
+    @Operation(summary = "Get a user.", tags = "UserV1Controller")
+    public ResponseEntity<User> findById(@PathVariable UUID id) {
+        User user = service.findById(id);
+        user.setPassword(null);
+        return ResponseEntity.ok().body(user);
+    }
 
     @PostMapping
+    @Operation(summary = "Create a user.", tags = "UserV1Controller")
     public ResponseEntity<String> save(@RequestBody @Valid UserV1Dto dto) {
         User user = mapper.map(dto, User.class);
         service.save(user);
@@ -53,6 +63,7 @@ public class UserV1Controller {
     }
 
     @PutMapping("{id}")
+    @Operation(summary = "Update a user.", tags = "UserV1Controller")
     public ResponseEntity<User> update(@PathVariable UUID id, @RequestBody @Valid UserV1Dto dto) {
         User user = service.findById(id);
         user = mapper.map(dto, User.class);
@@ -65,6 +76,7 @@ public class UserV1Controller {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Delete a user.", tags = "UserV1Controller")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         service.delete(id);
         

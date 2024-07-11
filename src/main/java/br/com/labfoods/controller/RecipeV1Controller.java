@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.labfoods.dto.RecipeV1Dto;
 import br.com.labfoods.model.Recipe;
 import br.com.labfoods.service.RecipeService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,18 +33,21 @@ public class RecipeV1Controller {
     }
     
     @GetMapping
+    @Operation(summary = "Get recipe list.", tags = "RecipeV1Controller")
     public ResponseEntity<List<Recipe>> findAll() {
         List<Recipe> recipe = service.findAll();
         return ResponseEntity.ok().body(recipe);
     }
     
     @GetMapping("{id}")
-    public ResponseEntity<Recipe> findByCodigo(@PathVariable UUID id) {
+    @Operation(summary = "Get a recipe.", tags = "RecipeV1Controller")
+    public ResponseEntity<Recipe> findById(@PathVariable UUID id) {
         Recipe recipe = service.findById(id);
         return ResponseEntity.ok().body(recipe);
     }
 
     @PostMapping
+    @Operation(summary = "Create a recipe.", tags = "RecipeV1Controller")
     public ResponseEntity<Recipe> save(@RequestBody @Valid RecipeV1Dto dto) {
         Recipe recipe = mapper.map(dto, Recipe.class);
         service.save(recipe);
@@ -52,6 +56,7 @@ public class RecipeV1Controller {
     }
 
     @PutMapping("{id}")
+    @Operation(summary = "Update a recipe.", tags = "RecipeV1Controller")
     public ResponseEntity<Recipe> update(@PathVariable UUID id, @RequestBody @Valid RecipeV1Dto dto) {
         Recipe recipe = service.findById(id);
         recipe = mapper.map(dto, Recipe.class);
@@ -62,6 +67,7 @@ public class RecipeV1Controller {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Delete a recipe.", tags = "RecipeV1Controller")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         service.delete(id);
         
