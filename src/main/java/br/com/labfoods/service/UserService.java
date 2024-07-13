@@ -13,6 +13,8 @@ import br.com.labfoods.repository.UserRepository;
 import br.com.labfoods.utils.exceptions.BusinessException;
 import br.com.labfoods.utils.exceptions.ConflictException;
 import br.com.labfoods.utils.exceptions.NotFoundException;
+import br.com.labfoods.utils.exceptions.UnauthorizedException;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -36,21 +38,23 @@ public class UserService {
 
     public List<User> findAll() {
         LOGGER.info("Listing all users");
-
-        List<User> users = repository.findAll();
-        Optional.ofNullable(users)
-            .orElseThrow(NotFoundException::new);
-
-        return users;
+        
+        return Optional.ofNullable(repository.findAll())
+        .orElseThrow(NotFoundException::new);
     }
 
     public User findById(UUID id) {
         LOGGER.info("Listing user by id: {}", id);
-
-        User user = repository.findById(id)
+    
+        return repository.findById(id)
             .orElseThrow(NotFoundException::new);
+    }
 
-        return user;
+    public User findByEmail(String email) {
+        LOGGER.info("Listing user by email: {}", email);
+
+        return Optional.ofNullable(repository.findByEmail(email))
+        .orElseThrow(UnauthorizedException::new);
     }
 
     public void save(User user){

@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import java.util.UUID;
 import br.com.labfoods.model.Recipe;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class VoteV1Dto {
     private double note;
     private String feedback;

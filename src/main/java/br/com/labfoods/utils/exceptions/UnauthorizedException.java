@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import br.com.labfoods.utils.exceptions.error.Error;
 
 public class UnauthorizedException extends RuntimeException {
-  private static final  String MESSAGE = "Unauthorized";
+  private static final String MESSAGE = "Invalid session.";
 
   private final transient Error error;
   

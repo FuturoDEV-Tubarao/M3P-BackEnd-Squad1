@@ -23,18 +23,6 @@ public class RecipeService {
         this.repository = repository;
     }
 
-    public int countBy() {
-        LOGGER.info("Counting active users");
-        return repository.countBy();
-    }
-
-    public List<Recipe> findTop3Recipes() {
-        LOGGER.info("Listing top 3 recipes");
-
-        //Além do aluno desenvolver o dashboard retornando a quantidade de usuários e receitas, apresentou o top 3 das receitas mais bem avaliadas.
-        return repository.findTop3Recipes();
-    }
-
     public List<Recipe> findAll() {
         LOGGER.info("Listing all recipes");
 
@@ -80,5 +68,15 @@ public class RecipeService {
 
     public boolean existsByCreatedById(UUID id) {
        return repository.existsByCreatedById(id);
+    }
+
+    public int countBy() {
+        LOGGER.info("Counting active users");
+        return repository.countBy();
+    }
+
+    public List<Recipe> findTop3Recipes() {
+        LOGGER.info("Listing top 3 recipes");
+        return repository.findTop3Recipes();
     }
 }
