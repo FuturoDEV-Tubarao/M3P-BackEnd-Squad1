@@ -73,7 +73,6 @@ public class Recipe {
     private String origin;
 
     @Length(max = 255)
-    @NotEmpty
     private String url;
 
     @OneToMany (mappedBy="recipe")

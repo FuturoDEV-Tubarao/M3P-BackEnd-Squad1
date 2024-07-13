@@ -5,8 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SessionV1Dto {
+public class LoginV1Dto {
 
-    private String token;
+    private String email;
+    private String password;
     
 }

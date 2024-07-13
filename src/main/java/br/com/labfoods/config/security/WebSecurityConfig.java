@@ -3,6 +3,7 @@ package br.com.labfoods.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,9 +21,13 @@ import br.com.labfoods.config.CustomAuthenticationFilter;
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
-        "/**",
         "/api/labfoods/v1/auth",
         "/swagger-ui/index.html"
+    };
+
+    private static final String[] AUTH_WHITELIST_GET= {
+        "/api/labfoods/v1/dashboard",
+        "/api/labfoods/v1/recipe",
     };
   
     private CustomAuthenticationFilter customAuthenticationFilter;
@@ -37,6 +42,7 @@ public class WebSecurityConfig {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(request -> request
                 .requestMatchers(AUTH_WHITELIST).permitAll()
+                .requestMatchers(HttpMethod.GET, AUTH_WHITELIST_GET).permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(manger -> manger
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -44,24 +50,10 @@ public class WebSecurityConfig {
             .build();
     }
 
-    // @Bean
-    // public UserDetailsService userDetailsService() {
-    //     return new UserDetailsServiceImpl();
-    // }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // @Bean
-    // public AuthenticationProvider authenticationProvider() {
-    //     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-    //     authenticationProvider.setUserDetailsService(userDetailsService());
-    //     authenticationProvider.setPasswordEncoder(passwordEncoder());
-    //     return authenticationProvider;
-
-    // }
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

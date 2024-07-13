@@ -19,12 +19,8 @@ public class JwtService {
     /*
      * https://medium.com/spring-boot/spring-boot-3-spring-security-6-jwt-authentication-authorization-98702d6313a5
      */
-
     public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
     public static final long EXPIRATION_TIME = 900_000; // 15 mins
-    public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String HEADER_STRING = "Authorization";
-    public static final String SIGN_UP_URL = "/api/services/controller/user";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
