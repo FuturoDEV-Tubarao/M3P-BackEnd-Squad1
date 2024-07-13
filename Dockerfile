@@ -7,7 +7,7 @@ COPY . .
 RUN chmod 700 mvnw
 # mesma função do install, gerar o .jar
 
-RUN ./mvnw clean package 
+##RUN ./mvnw clean package 
 
 # ******* Segunda parte da imagem
 FROM openjdk:17-jdk-slim-buster
