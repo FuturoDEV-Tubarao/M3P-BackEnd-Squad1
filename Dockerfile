@@ -1,8 +1,9 @@
 FROM eclipse-temurin:21-jdk as build
 COPY . /app
 WORKDIR /app
-# Ensure the Maven build names the JAR file explicitly, e.g., app.jar
-RUN ./mvnw clean package -DskipTests
+# Add execute permissions to the Maven wrapper and then run it
+RUN chmod +x ./mvnw && ./mvnw clean package -DskipTests
+RUN mv -f target/*.jar app.jar
 
 FROM eclipse-temurin:21-jre
 ARG DATABASE_URL
@@ -10,8 +11,7 @@ ARG DATABASE_USERNAME
 ARG DATABASE_PASSWORD
 ARG PORT
 ENV PORT=${PORT}
-# Copy the explicitly named JAR file
-COPY --from=build /app/target/app.jar .
+COPY --from=build /app/app.jar .
 RUN useradd runtime
 USER runtime
-ENTRYPOINT [ "java", "-Dserver.port=${PORT}", "-jar", "app.jar" ]
+ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
