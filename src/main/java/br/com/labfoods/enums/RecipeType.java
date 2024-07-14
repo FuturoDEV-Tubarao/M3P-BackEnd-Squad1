@@ -1,5 +1,5 @@
 package br.com.labfoods.enums;
 
 public enum RecipeType {
-    OTHERS
+    MAIN_DISH, APPETIZERS, DRINKS, BREAKFAST
 }
