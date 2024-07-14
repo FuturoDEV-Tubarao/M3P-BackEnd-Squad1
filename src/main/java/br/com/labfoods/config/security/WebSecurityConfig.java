@@ -29,6 +29,10 @@ public class WebSecurityConfig {
         "/api/labfoods/v1/dashboard",
         "/api/labfoods/v1/recipe",
     };
+
+    private static final String[] AUTH_WHITELIST_POST= {
+        "/api/labfoods/v1/user",
+    };
   
     private CustomAuthenticationFilter customAuthenticationFilter;
 
@@ -43,6 +47,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(request -> request
                 .requestMatchers(AUTH_WHITELIST).permitAll()
                 .requestMatchers(HttpMethod.GET, AUTH_WHITELIST_GET).permitAll()
+                .requestMatchers(HttpMethod.POST, AUTH_WHITELIST_POST).permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(manger -> manger
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
