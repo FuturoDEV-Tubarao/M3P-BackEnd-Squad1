@@ -25,12 +25,15 @@ public class WebSecurityConfig {
         "/swagger-ui/index.html"
     };
 
-    private static final String[] AUTH_WHITELIST_GET= {
-        "/api/labfoods/v1/dashboard",
+    private static final String[] AUTH_WHITELIST_GET = {
+        "/api/labfoods/v1/dashboard/**",
         "/api/labfoods/v1/recipe",
+        "/api/labfoods/v1/recipe/**",
+        "/api/labfoods/v1/vote",
+        "/api/labfoods/v1/vote/**",
     };
 
-    private static final String[] AUTH_WHITELIST_POST= {
+    private static final String[] AUTH_WHITELIST_POST = {
         "/api/labfoods/v1/user",
     };
   
