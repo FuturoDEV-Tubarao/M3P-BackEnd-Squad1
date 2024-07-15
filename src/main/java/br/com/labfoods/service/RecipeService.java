@@ -17,10 +17,12 @@ public class RecipeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
 
     private RecipeRepository repository;
+    private UserService userService;
 
     @Autowired
-    public RecipeService(RecipeRepository repository){
+    public RecipeService(RecipeRepository repository, UserService userService){
         this.repository = repository;
+        this.userService = userService;
     }
 
     public List<Recipe> findAll() {
@@ -40,6 +42,7 @@ public class RecipeService {
     }
 
     public void save(Recipe recipe){
+        recipe.setCreatedBy(userService.userLogged());
 
         if(isNew(recipe)){
             LOGGER.info("Saving recipe");

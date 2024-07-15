@@ -83,12 +83,6 @@ public class Recipe {
     @JsonIgnore
     private User createdBy;
 
-    @Transient
-    @NotNull
-    public UUID getCreatedByContactId() {
-        return (this.createdBy != null) ? this.createdBy.getId() : null;
-    }
-
     @CreatedDate
     private LocalDateTime createdDate;
 

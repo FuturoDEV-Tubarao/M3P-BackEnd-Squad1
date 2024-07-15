@@ -15,6 +15,7 @@ import br.com.labfoods.utils.exceptions.ConflictException;
 import br.com.labfoods.utils.exceptions.NotFoundException;
 import br.com.labfoods.utils.exceptions.UnauthorizedException;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,12 +24,12 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private UserRepository repository;
-    private RecipeService recipeService;
+    // private RecipeService recipeService;
 
     @Autowired
-    public UserService(UserRepository repository, RecipeService recipeService){
+    public UserService(UserRepository repository){
         this.repository = repository;
-        this.recipeService = recipeService;
+        // this.recipeService = recipeService;
     }
 
 	public int countByActiveTrue() {
@@ -62,8 +63,6 @@ public class UserService {
         if(isNew(user)){
             LOGGER.info("Saving user");
             user.setCreatedDate(LocalDateTime.now());
-
-            //TODO Verificar regra para usuários existentes, nao funciona desta forma.
             
             //Não permite cadastrar usuários com o mesmo CPF; 
             boolean cpfInUse = repository.existsByCpf(user.getCpf());
@@ -102,10 +101,10 @@ public class UserService {
             throw new NotFoundException();
         }
 
-        // Não permite deletar usuário que tenha receitas cadastradas; 
-        if(recipeService.existsByCreatedById(id)) {
-            throw new BusinessException("user","Can't delete someone with recipes associated");
-        }
+        // // Não permite deletar usuário que tenha receitas cadastradas; 
+        // if(recipeService.existsByCreatedById(id)) {
+        //     throw new BusinessException("user","Can't delete someone with recipes associated");
+        // }
 
         repository.deleteById(id);
     }
@@ -130,5 +129,10 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    public User userLogged() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return findById(user.getId());
     }
 }
