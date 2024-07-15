@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import br.com.labfoods.model.Recipe;
 import br.com.labfoods.model.Vote;
 import br.com.labfoods.repository.VoteRepository;
 import br.com.labfoods.utils.exceptions.BusinessException;
@@ -18,10 +20,14 @@ public class VoteService {
     private static final Logger LOGGER = LoggerFactory.getLogger(VoteService.class);
 
     private VoteRepository repository;
+    private RecipeService recipeService;
+    private UserService userService;
 
     @Autowired
-    public VoteService(VoteRepository repository){
+    public VoteService(VoteRepository repository, RecipeService recipeService, UserService userService){
         this.repository = repository;
+        this.recipeService = recipeService;
+        this.userService = userService;
     }
 
     public List<Vote> findAll() {
@@ -41,15 +47,15 @@ public class VoteService {
     }
 
     public void save(Vote vote){
+        vote.setCreatedBy(userService.userLogged());
+
+        Recipe recipe = recipeService.findById(vote.getRecipeId());
+        vote.setRecipe(recipe);
 
         if(isNew(vote)){
             LOGGER.info("Saving vote");
             vote.setCreatedDate(LocalDateTime.now());
-
-            // Cada usuário poderá votar em uma receita
-            if(repository.existsByCreatedById(vote.getCreatedByContactId())) {
-                throw new BusinessException("contact","Can't vote in more than one recipe");
-            }
+            
         }else {
             LOGGER.info("Updating vote");
             vote.setLastModifiedDate(LocalDateTime.now());
@@ -81,5 +87,4 @@ public class VoteService {
     private boolean isNew(Vote vote) {
         return vote.getId() == null;
     }
-
 }

@@ -3,7 +3,7 @@ package br.com.labfoods.dto;
 import java.time.LocalDateTime;
 
 import java.util.UUID;
-import br.com.labfoods.model.Recipe;
+import br.com.labfoods.model.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,9 +11,10 @@ import lombok.Data;
 @Builder
 public class VoteV1Dto {
     private double note;
+    private String title;
     private String feedback;
-    private Recipe recipe;
-    private UUID createdByContactId;
+    private UUID recipeId;
+    private User createdBy;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }
