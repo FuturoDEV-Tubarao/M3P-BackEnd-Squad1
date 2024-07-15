@@ -20,11 +20,14 @@ public class AuthService {
     }
 
     private String getEmailContextHolder(){
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        LOGGER.info("Fetching email from contextHolder: {}", email);
+        return email;
     }
 
     public String generateToken(){
         String email = getEmailContextHolder();
+        LOGGER.info("Generating token for email: {}", email);
         return jwtService.generateToken(email);
     }
 }
