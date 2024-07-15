@@ -62,7 +62,7 @@ public class VoteService {
         }
 
         //e) Não pode votar nas suas próprias receitas;
-        if(vote.getRecipe().getCreatedBy().getId() == vote.getCreatedByContactId()){
+        if(vote.getRecipe().getCreatedBy().getId() == vote.getCreatedBy().getId()){
             throw new BusinessException("contact","Can't vote in your own recipe");
         }
 
