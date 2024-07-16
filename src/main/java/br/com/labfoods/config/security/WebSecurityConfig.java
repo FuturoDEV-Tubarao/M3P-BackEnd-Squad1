@@ -12,9 +12,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import br.com.labfoods.config.CustomAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -52,9 +52,14 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.GET, AUTH_WHITELIST_GET).permitAll()
                 .requestMatchers(HttpMethod.POST, AUTH_WHITELIST_POST).permitAll()
                 .anyRequest().authenticated())
+
+            .exceptionHandling((exception)-> exception
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedPage("/error/access-denied"))
             .sessionManagement(manger -> manger
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .cors(cors -> cors.disable())
             .build();
     }
 
@@ -66,5 +71,10 @@ public class WebSecurityConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new AuthEntryPoint();
     }
 }

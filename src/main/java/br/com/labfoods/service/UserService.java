@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import br.com.labfoods.config.security.CustomUserDetails;
 import br.com.labfoods.model.User;
 import br.com.labfoods.repository.UserRepository;
 import br.com.labfoods.utils.exceptions.BusinessException;
 import br.com.labfoods.utils.exceptions.ConflictException;
 import br.com.labfoods.utils.exceptions.NotFoundException;
 import br.com.labfoods.utils.exceptions.UnauthorizedException;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -137,7 +137,7 @@ public class UserService {
     }
 
     public User userLogged() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findById(user.getId());
     }
 }

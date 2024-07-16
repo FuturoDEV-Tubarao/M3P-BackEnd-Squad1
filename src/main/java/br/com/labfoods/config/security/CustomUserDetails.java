@@ -4,13 +4,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import br.com.labfoods.model.User;
 
-public class CustomUserDetails extends User implements UserDetails {
+public class CustomUserDetails implements UserDetails {
     private static final String ADMIN = "ADMIN";
 
     private String username;
@@ -33,14 +32,18 @@ public class CustomUserDetails extends User implements UserDetails {
         return authorities;
     }
 
+    public UUID getId() {
+        return this.id;
+    }
+
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     @Override

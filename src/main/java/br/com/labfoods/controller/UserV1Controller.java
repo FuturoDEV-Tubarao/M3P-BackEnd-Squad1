@@ -55,11 +55,13 @@ public class UserV1Controller {
 
     @PostMapping
     @Operation(summary = "Create a user.", tags = "UserV1Controller")
-    public ResponseEntity<String> save(@RequestBody @Valid UserV1Dto dto) {
+    public ResponseEntity<User> save(@RequestBody @Valid UserV1Dto dto) {
         User user = mapper.map(dto, User.class);
         service.create(user);
 
-        return ResponseEntity.ok().body(user.getName());
+        User securityUser = new User(user.getId(), user.getName(), user.getGender(), user.isActive());
+
+        return ResponseEntity.ok().body(securityUser);
     }
 
     @PutMapping("{id}")
