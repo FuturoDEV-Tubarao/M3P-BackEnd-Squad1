@@ -12,7 +12,7 @@ public class RecipeV1Dto {
     private String title;
     private String description;
     private String ingredients;
-    private int preparationTime;
+    private String preparationTime;
     private String preparationMethod;
     private RecipeType recipeType;
     private boolean glutenFree;

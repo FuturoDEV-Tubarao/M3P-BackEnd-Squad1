@@ -18,7 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -53,7 +52,7 @@ public class Recipe {
     
     @Positive
     @NotNull
-    private int preparationTime;
+    private String preparationTime;
 
     @Length(max = 255)
     @NotEmpty
