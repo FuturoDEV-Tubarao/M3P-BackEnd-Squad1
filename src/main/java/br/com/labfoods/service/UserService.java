@@ -58,35 +58,23 @@ public class UserService {
         .orElseThrow(UnauthorizedException::new);
     }
 
-    public void save(User user){
+    public void create(User user) {
+        LOGGER.info("Creating a user");
+        user.setCreatedDate(LocalDateTime.now());
+        
+        userValidation(user);
 
-        if(isNew(user)){
-            LOGGER.info("Saving user");
-            user.setCreatedDate(LocalDateTime.now());
-            
-            //Não permite cadastrar usuários com o mesmo CPF; 
-            boolean cpfInUse = repository.existsByCpf(user.getCpf());
-            if(cpfInUse) {
-                throw new ConflictException("CPF");
-            }
+		String password = user.getPassword();
+		user.setPassword(encodePassword(password));
 
-            //Não permite cadastrar usuários com o mesmo email; 
-            boolean emailInUse = existsByEmail(user.getEmail());
-            if(emailInUse) {
-                throw new ConflictException("email");
-            }
-        }else {
-            LOGGER.info("Updating user");
-            user.setLastModifiedDate(LocalDateTime.now());
-        }
+		repository.save(user);
+    }
 
-        if(user == null || user.getEmail() == null) {
-            throw new BusinessException("email", "Email is required");
-        }
-
-        if(user == null || user.getPassword() == null) {
-            throw new BusinessException("password", "Password is required");
-        }
+    public void update(User user){
+        LOGGER.info("Updating a user");
+        user.setLastModifiedDate(LocalDateTime.now());
+    
+        userValidation(user);
 
 		String password = user.getPassword();
 		user.setPassword(encodePassword(password));
@@ -108,10 +96,6 @@ public class UserService {
 
         repository.deleteById(id);
     }
-    
-    private boolean isNew(User user) {
-        return user.getId() == null;
-    }
 
     public boolean existsByEmail(String email){
         return repository.existsByEmail(email);
@@ -129,6 +113,27 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    private void userValidation(User user){
+
+        //Não permite cadastrar usuários com o mesmo CPF; 
+        User userUsedCpf = repository.findByCpf(user.getCpf());
+        if(userUsedCpf != null && userUsedCpf.getId() != user.getId() && userUsedCpf.getCpf().equals(user.getCpf())) {
+            throw new ConflictException("cpf");
+        }
+
+        //Não permite alterar o cpf
+        User userChangedCpf = repository.findByCpf(user.getCpf());
+        if(userChangedCpf != null && userChangedCpf.getId() == user.getId() && !userChangedCpf.getCpf().equals(user.getCpf())) {
+            throw new BusinessException("cpf", "It is not allowed to change the CPF.");
+        }
+
+        //Não permite cadastrar usuários com o mesmo email; 
+        User userUsedEmail = repository.findByEmail(user.getEmail());
+        if(userUsedEmail != null && userUsedEmail.getId() != user.getId() && userUsedEmail.getEmail().equals(user.getEmail())) {
+            throw new ConflictException("email");
+        }
     }
 
     public User userLogged() {

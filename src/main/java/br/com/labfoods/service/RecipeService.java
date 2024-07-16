@@ -41,17 +41,19 @@ public class RecipeService {
             .orElseThrow(NotFoundException::new);
     }
 
-    public void save(Recipe recipe){
+    public void create(Recipe recipe){
         recipe.setCreatedBy(userService.userLogged());
 
-        if(isNew(recipe)){
-            LOGGER.info("Saving recipe");
-            recipe.setCreatedDate(LocalDateTime.now());
-        }else {
-            LOGGER.info("Updating recipe");
-            recipe.setLastModifiedDate(LocalDateTime.now());
-        }
+        LOGGER.info("Creating a recipe");
+        recipe.setCreatedDate(LocalDateTime.now());
 
+        repository.save(recipe);
+    }
+
+    public void update(Recipe recipe){
+        LOGGER.info("Updating a recipe");
+        recipe.setLastModifiedDate(LocalDateTime.now());
+    
         repository.save(recipe);
     }
 
@@ -65,10 +67,6 @@ public class RecipeService {
         repository.deleteById(id);
     }
 
-    private boolean isNew(Recipe recipe) {
-        return recipe.getId() == null;
-    }
-
     public boolean existsByCreatedById(UUID id) {
        return repository.existsByCreatedById(id);
     }
@@ -76,10 +74,5 @@ public class RecipeService {
     public int countBy() {
         LOGGER.info("Counting active users");
         return repository.countBy();
-    }
-
-    public List<Recipe> findTop3Recipes() {
-        LOGGER.info("Listing top 3 recipes");
-        return repository.findTop3Recipes();
     }
 }

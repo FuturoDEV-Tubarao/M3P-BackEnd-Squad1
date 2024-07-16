@@ -50,7 +50,7 @@ public class RecipeV1Controller {
     @Operation(summary = "Create a recipe.", tags = "RecipeV1Controller")
     public ResponseEntity<Recipe> save(@RequestBody @Valid RecipeV1Dto dto) {
         Recipe recipe = mapper.map(dto, Recipe.class);
-        service.save(recipe);
+        service.create(recipe);
 
         return ResponseEntity.ok().body(recipe);
     }
@@ -61,7 +61,7 @@ public class RecipeV1Controller {
         Recipe recipe = service.findById(id);
         recipe = mapper.map(dto, Recipe.class);
         recipe.setId(id);
-        service.save(recipe);
+        service.update(recipe);
 
         return ResponseEntity.ok().body(recipe);
     }

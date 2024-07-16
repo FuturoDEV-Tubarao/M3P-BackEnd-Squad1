@@ -57,7 +57,7 @@ public class UserV1Controller {
     @Operation(summary = "Create a user.", tags = "UserV1Controller")
     public ResponseEntity<String> save(@RequestBody @Valid UserV1Dto dto) {
         User user = mapper.map(dto, User.class);
-        service.save(user);
+        service.create(user);
 
         return ResponseEntity.ok().body(user.getName());
     }
@@ -68,7 +68,7 @@ public class UserV1Controller {
         User user = service.findById(id);
         user = mapper.map(dto, User.class);
         user.setId(id);
-        service.save(user);
+        service.update(user);
 
         User securityUser = new User(user.getId(), user.getName(), user.getGender(), user.isActive());
         
