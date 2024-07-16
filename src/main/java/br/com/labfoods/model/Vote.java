@@ -45,7 +45,6 @@ public class Vote {
     private double note;
 
     @Length(max = 255)
-    @NotEmpty
     private String title;
 
     @Length(max = 255)
