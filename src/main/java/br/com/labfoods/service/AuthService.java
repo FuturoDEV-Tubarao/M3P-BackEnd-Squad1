@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import br.com.labfoods.config.security.JwtService;
+import br.com.labfoods.config.service.JwtService;
 
 @Service
 public class AuthService {

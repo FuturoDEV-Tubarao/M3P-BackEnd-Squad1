@@ -1,4 +1,4 @@
-package br.com.labfoods.config.security;
+package br.com.labfoods.config.service;
 
 import java.security.Key;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package br.com.labfoods.config.security;
+package br.com.labfoods.config.service;
 
 import java.util.Base64;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
