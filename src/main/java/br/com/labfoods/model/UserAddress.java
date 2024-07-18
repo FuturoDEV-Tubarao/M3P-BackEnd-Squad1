@@ -1,7 +1,6 @@
 package br.com.labfoods.model;
 
 import java.util.UUID;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +18,6 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "user_address")
 public class UserAddress {
     @Id
@@ -32,8 +30,8 @@ public class UserAddress {
     @Column
     private String street;
 
-    @Column
-    private int number;
+    @Column (name = "number_address")
+    private int numberAddress;
 
     @Column
     private String neighborhood;
