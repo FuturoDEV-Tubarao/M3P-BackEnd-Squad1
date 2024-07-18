@@ -19,8 +19,11 @@ import br.com.labfoods.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 @RestController
 @RequestMapping("/api/labfoods/v1/user")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserV1Controller {
 
     private UserService service;

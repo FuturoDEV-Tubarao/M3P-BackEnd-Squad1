@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/labfoods/v1/recipe")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RecipeV1Controller {
 
     private RecipeService service;
@@ -34,16 +36,20 @@ public class RecipeV1Controller {
     
     @GetMapping
     @Operation(summary = "Get recipe list.", tags = "RecipeV1Controller")
-    public ResponseEntity<List<Recipe>> findAll() {
-        List<Recipe> recipe = service.findAll();
-        return ResponseEntity.ok().body(recipe);
+    public ResponseEntity<List<RecipeV1Dto>> findAll() {
+        List<Recipe> recipes = service.findAll();
+        List<RecipeV1Dto> dtos = (List<RecipeV1Dto>) mapper.map(recipes, RecipeV1Dto.class);
+        return ResponseEntity.ok().body(dtos);
     }
     
     @GetMapping("{id}")
     @Operation(summary = "Get a recipe.", tags = "RecipeV1Controller")
-    public ResponseEntity<Recipe> findById(@PathVariable UUID id) {
+    public ResponseEntity<RecipeV1Dto> findById(@PathVariable UUID id) {
         Recipe recipe = service.findById(id);
-        return ResponseEntity.ok().body(recipe);
+        
+        RecipeV1Dto dto = mapper.map(recipe, RecipeV1Dto.class);
+
+        return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping

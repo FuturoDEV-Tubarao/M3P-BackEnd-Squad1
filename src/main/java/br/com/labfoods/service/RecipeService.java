@@ -32,10 +32,10 @@ public class RecipeService {
 
         List<Recipe> recipes = repository.findAll();
 
-        recipes.forEach(recipe -> {
-            User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
-            recipe.setCreatedBy(securityUser);
-        });
+        // recipes.forEach(recipe -> {
+        //     User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
+        //     recipe.setCreatedBy(securityUser);
+        // });
 
         return Optional.ofNullable(recipes)
             .orElseThrow(NotFoundException::new);
@@ -45,8 +45,9 @@ public class RecipeService {
     public Recipe findById(UUID id) {
         LOGGER.info("Listing recipe by id: {}", id);
         Recipe recipe = repository.findById(id).orElseThrow(NotFoundException::new);
-        User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
-        recipe.setCreatedBy(securityUser);
+
+        // User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
+        // recipe.setCreatedBy(securityUser);
 
         return recipe;
     }

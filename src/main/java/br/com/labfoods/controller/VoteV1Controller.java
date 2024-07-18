@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +21,10 @@ import br.com.labfoods.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
+
 @RestController
 @RequestMapping("/api/labfoods/v1/vote")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VoteV1Controller {
 
     private VoteService service;
@@ -35,16 +38,24 @@ public class VoteV1Controller {
     
     @GetMapping
     @Operation(summary = "Get vote list.", tags = "VoteV1Controller")
-    public ResponseEntity<List<Vote>> findAll() {
+    public ResponseEntity<List<VoteV1Dto>> findAll() {
         List<Vote> votes = service.findAll();
+
+        // List<VoteV1Dto> dtos = votes.stream()
+        //     .map(vote -> mapper.map(vote, VoteV1Dto.class))
+        //     .collect(Collectors.toList());
+
         return ResponseEntity.ok().body(votes);
     }
     
     @GetMapping("{id}")
     @Operation(summary = "Get a vote.", tags = "VoteV1Controller")
-    public ResponseEntity<Vote> findById(@PathVariable UUID id) {
+    public ResponseEntity<VoteV1Dto> findById(@PathVariable UUID id) {
         Vote vote = service.findById(id);
-        return ResponseEntity.ok().body(vote);
+
+        VoteV1Dto dto = mapper.map(vote, VoteV1Dto.class);
+
+        return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping
@@ -62,7 +73,7 @@ public class VoteV1Controller {
         Vote vote = service.findById(id);
         vote = mapper.map(dto, Vote.class);
         vote.setId(id);
-        
+
         service.update(vote);
 
         return ResponseEntity.ok().body(vote);
