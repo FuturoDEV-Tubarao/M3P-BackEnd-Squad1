@@ -62,6 +62,7 @@ public class VoteV1Controller {
         Vote vote = service.findById(id);
         vote = mapper.map(dto, Vote.class);
         vote.setId(id);
+        
         service.update(vote);
 
         return ResponseEntity.ok().body(vote);

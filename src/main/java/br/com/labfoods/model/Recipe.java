@@ -25,13 +25,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "recipe")
 public class Recipe {
     @Id
@@ -79,7 +79,6 @@ public class Recipe {
 
     @ManyToOne
     @JoinColumn(name="created_by__contact_id")
-    @JsonIgnore
     private User createdBy;
 
     @CreatedDate

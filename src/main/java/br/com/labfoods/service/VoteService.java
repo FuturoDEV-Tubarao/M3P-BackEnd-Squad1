@@ -46,7 +46,7 @@ public class VoteService {
     public Vote findById(UUID id) {
         LOGGER.info("Listing vote by id: {}", id);
 
-        Vote vote = repository.findByIdWithUser(id)
+        Vote vote = repository.findById(id)
             .orElseThrow(NotFoundException::new);
 
         User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());

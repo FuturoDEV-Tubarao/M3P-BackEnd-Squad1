@@ -30,7 +30,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "vote")
 public class Vote {
     
@@ -64,7 +63,6 @@ public class Vote {
     
     @ManyToOne
     @JoinColumn(name="created_by__contact_id")
-    @JsonIgnore
     private User createdBy;
 
     @CreatedDate

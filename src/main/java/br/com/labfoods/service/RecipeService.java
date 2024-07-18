@@ -44,9 +44,7 @@ public class RecipeService {
     @Transactional
     public Recipe findById(UUID id) {
         LOGGER.info("Listing recipe by id: {}", id);
-        Recipe recipe = repository.findByIdWithUser(id).orElseThrow(NotFoundException::new);
-       // User user = userRepository.findById(recipe.getCreatedBy().getId()).orElseThrow(NotFoundException::new);
-
+        Recipe recipe = repository.findById(id).orElseThrow(NotFoundException::new);
         User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
         recipe.setCreatedBy(securityUser);
 
