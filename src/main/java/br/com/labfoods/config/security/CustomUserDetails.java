@@ -12,18 +12,22 @@ import br.com.labfoods.model.User;
 public class CustomUserDetails implements UserDetails {
     private static final String ADMIN = "ADMIN";
 
+    private UUID id;
+    private String name;
     private String username;
     private String password;
-    private UUID id;
+
     Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
         //Roles
         List<GrantedAuthority> auths = Arrays.asList(new SimpleGrantedAuthority(ADMIN));
 
+        this.id = user.getId();
+        this.name = user.getName();
         this.username = user.getEmail();
         this.password = user.getPassword();
-        this.id = user.getId();
+
         this.authorities = auths;
     }
 
@@ -36,14 +40,18 @@ public class CustomUserDetails implements UserDetails {
         return this.id;
     }
 
-    @Override
-    public String getPassword() {
-        return this.password;
+    public String getName() {
+        return this.name;
     }
 
     @Override
     public String getUsername() {
         return this.username;
+    }
+    
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
     @Override
