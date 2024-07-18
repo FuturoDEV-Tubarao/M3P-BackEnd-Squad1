@@ -25,10 +25,6 @@ public class AuthV1Controller {
     @PostMapping()
     @Operation(summary = "Generate a session.", tags = "AuthV1Controller")
     public ResponseEntity<SessionV1Dto> login() {
-        String jwt = service.generateToken();
-        
-        SessionV1Dto sessionDto = SessionV1Dto.builder().token(jwt).build();
-
-        return ResponseEntity.ok().body(sessionDto);
+        return ResponseEntity.ok().body(service.createSession());
     }
 }

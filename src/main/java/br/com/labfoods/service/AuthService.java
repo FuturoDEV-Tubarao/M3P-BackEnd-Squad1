@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import br.com.labfoods.config.security.CustomUserDetails;
 import br.com.labfoods.config.service.JwtService;
+import br.com.labfoods.dto.SessionV1Dto;
+import br.com.labfoods.model.User;
 
 @Service
 public class AuthService {
@@ -19,15 +22,21 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    private String getEmailContextHolder(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        LOGGER.info("Fetching email from contextHolder: {}", email);
-        return email;
-    }
+    public SessionV1Dto createSession(){
+        LOGGER.info("Generating a session.");
 
-    public String generateToken(){
-        String email = getEmailContextHolder();
+        LOGGER.info("Fetching email from contextHolder.");
+        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = user.getUsername();
+
         LOGGER.info("Generating token for email: {}", email);
-        return jwtService.generateToken(email);
+        String jwt = jwtService.generateToken(email);
+
+        return SessionV1Dto.builder()
+            .id(user.getId())
+            .name(user.getName())
+            .email(email)
+            .token(jwt)
+            .build();
     }
 }

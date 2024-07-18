@@ -60,11 +60,14 @@ public class JwtService {
 
     private String createToken(Map<String, Object> claims, String email) {
 
+        Date currentTime = new Date(System.currentTimeMillis());
+        Date expiredTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(email)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .setIssuedAt(currentTime)
+            .setExpiration(expiredTime)
             .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
