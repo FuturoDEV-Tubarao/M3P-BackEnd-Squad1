@@ -11,7 +11,6 @@ import br.com.labfoods.model.User;
 import br.com.labfoods.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import br.com.labfoods.service.RecipeService;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/labfoods/v1/dashboard")
@@ -30,12 +29,8 @@ public class DashboardV1Controller {
     @GetMapping("users")
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.findAll();
-
-        List<User> securityUsers = users.stream()
-            .map(user -> new User(user.getId(), user.getName(), user.getGender(), user.isActive()))
-            .collect(Collectors.toList());
         
-        return ResponseEntity.ok().body(securityUsers);
+        return ResponseEntity.ok().body(users);
     }
 
     @Operation(summary = "Get recipe list.", tags = "DashboardV1Controller")

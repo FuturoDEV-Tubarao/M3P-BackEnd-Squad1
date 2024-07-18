@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.labfoods.model.Recipe;
+import br.com.labfoods.model.User;
 import br.com.labfoods.repository.RecipeRepository;
 import br.com.labfoods.utils.exceptions.NotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class RecipeService {
@@ -30,15 +32,25 @@ public class RecipeService {
 
         List<Recipe> recipes = repository.findAll();
 
+        recipes.forEach(recipe -> {
+            User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
+            recipe.setCreatedBy(securityUser);
+        });
+
         return Optional.ofNullable(recipes)
             .orElseThrow(NotFoundException::new);
     }
 
+    @Transactional
     public Recipe findById(UUID id) {
         LOGGER.info("Listing recipe by id: {}", id);
+        Recipe recipe = repository.findByIdWithUser(id).orElseThrow(NotFoundException::new);
+       // User user = userRepository.findById(recipe.getCreatedBy().getId()).orElseThrow(NotFoundException::new);
 
-        return repository.findById(id)
-            .orElseThrow(NotFoundException::new);
+        User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
+        recipe.setCreatedBy(securityUser);
+
+        return recipe;
     }
 
     public void create(Recipe recipe){

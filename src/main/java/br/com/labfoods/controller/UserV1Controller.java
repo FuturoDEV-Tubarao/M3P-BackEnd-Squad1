@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.stream.Collectors;
 import br.com.labfoods.dto.UserV1Dto;
 import br.com.labfoods.model.User;
 import br.com.labfoods.service.UserService;
@@ -38,18 +37,14 @@ public class UserV1Controller {
     public ResponseEntity<List<User>> findAll() {
         List<User> users = service.findAll();
 
-        List<User> securityUsers = users.stream()
-            .map(user -> new User(user.getId(), user.getName(), user.getGender(), user.isActive()))
-            .collect(Collectors.toList());
-        
-        return ResponseEntity.ok().body(securityUsers);
+        return ResponseEntity.ok().body(users);
     }
         
     @GetMapping("{id}")
     @Operation(summary = "Get a user.", tags = "UserV1Controller")
     public ResponseEntity<User> findById(@PathVariable UUID id) {
         User user = service.findById(id);
-        user.setPassword(null);
+        
         return ResponseEntity.ok().body(user);
     }
 
@@ -59,9 +54,7 @@ public class UserV1Controller {
         User user = mapper.map(dto, User.class);
         service.create(user);
 
-        User securityUser = new User(user.getId(), user.getName(), user.getGender(), user.isActive());
-
-        return ResponseEntity.ok().body(securityUser);
+        return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("{id}")
@@ -71,10 +64,8 @@ public class UserV1Controller {
         user = mapper.map(dto, User.class);
         user.setId(id);
         service.update(user);
-
-        User securityUser = new User(user.getId(), user.getName(), user.getGender(), user.isActive());
         
-        return ResponseEntity.ok().body(securityUser);
+        return ResponseEntity.ok().body(user);
     }
 
     @DeleteMapping("{id}")

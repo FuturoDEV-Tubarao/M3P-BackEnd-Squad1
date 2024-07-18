@@ -77,10 +77,14 @@ public class User {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    public User(UUID id, String name, Gender gender, boolean active) {
+    public User(UUID id, String name, boolean active) {
         this.id = id;
         this.name = name;
-        this.gender = gender;
         this.active = active;
+    }
+
+    public User(UUID id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

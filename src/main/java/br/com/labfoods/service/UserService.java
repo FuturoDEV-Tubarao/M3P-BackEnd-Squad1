@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.labfoods.config.security.CustomUserDetails;
@@ -39,23 +40,31 @@ public class UserService {
 
     public List<User> findAll() {
         LOGGER.info("Listing all users");
-        
-        return Optional.ofNullable(repository.findAll())
-        .orElseThrow(NotFoundException::new);
+
+        List<User> users = Optional
+            .ofNullable(repository.findAll())
+            .orElseThrow(NotFoundException::new);
+
+        return users.stream()
+            .map(user -> new User(user.getId(), user.getName(), user.isActive()))
+            .collect(Collectors.toList());
     }
 
     public User findById(UUID id) {
         LOGGER.info("Listing user by id: {}", id);
     
-        return repository.findById(id)
+        User user = repository.findById(id)
             .orElseThrow(NotFoundException::new);
-    }
+        user.setPassword(null);
 
+        return user;
+    }
+    
     public User findByEmail(String email) {
         LOGGER.info("Listing user by email: {}", email);
 
         return Optional.ofNullable(repository.findByEmail(email))
-        .orElseThrow(UnauthorizedException::new);
+            .orElseThrow(UnauthorizedException::new);
     }
 
     public void create(User user) {

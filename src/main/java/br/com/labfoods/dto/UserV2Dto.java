@@ -1,10 +1,8 @@
 package br.com.labfoods.dto;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import org.hibernate.validator.constraints.UUID;
-import br.com.labfoods.enums.Gender;
-import br.com.labfoods.model.UserAddress;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserV1Dto {
+public class UserV2Dto {
     private UUID id;
     private String name;
-    private Gender gender;
-    private String cpf;
-    private LocalDate birthDate;
-    private String email;
-    private String password;
     private boolean active;
-    private UserAddress userAddress;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }

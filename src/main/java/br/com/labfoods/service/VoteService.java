@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import br.com.labfoods.model.Recipe;
+import br.com.labfoods.model.User;
 import br.com.labfoods.model.Vote;
 import br.com.labfoods.repository.VoteRepository;
 import br.com.labfoods.utils.exceptions.BusinessException;
@@ -32,9 +32,13 @@ public class VoteService {
 
     public List<Vote> findAll() {
         LOGGER.info("Listing all votes");
-
+    
         List<Vote> votes = repository.findAll();
-
+        votes.forEach(vote -> {
+            User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+            vote.setCreatedBy(securityUser);
+        });
+    
         return Optional.ofNullable(votes)
             .orElseThrow(NotFoundException::new);
     }
@@ -42,8 +46,13 @@ public class VoteService {
     public Vote findById(UUID id) {
         LOGGER.info("Listing vote by id: {}", id);
 
-        return repository.findById(id)
+        Vote vote = repository.findByIdWithUser(id)
             .orElseThrow(NotFoundException::new);
+
+        User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+        vote.setCreatedBy(securityUser);
+
+        return vote;
     }
 
     public void create(Vote vote){
