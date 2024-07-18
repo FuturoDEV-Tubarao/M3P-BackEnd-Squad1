@@ -49,8 +49,11 @@ public class VoteService {
         Vote vote = repository.findById(id)
             .orElseThrow(NotFoundException::new);
 
-        User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-        vote.setCreatedBy(securityUser);
+        User securityUserVote = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+        vote.setCreatedBy(securityUserVote);
+
+        User securityUserRecipe = new User(vote.getRecipe().getCreatedBy().getId(), vote.getRecipe().getCreatedBy().getName());
+        vote.getRecipe().setCreatedBy(securityUserRecipe);
 
         return vote;
     }
