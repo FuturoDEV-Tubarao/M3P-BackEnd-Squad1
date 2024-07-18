@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import br.com.labfoods.config.service.BasicService;
 import br.com.labfoods.config.service.JwtService;
 import br.com.labfoods.utils.exceptions.UnauthorizedException;
