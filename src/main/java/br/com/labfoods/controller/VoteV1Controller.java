@@ -38,24 +38,16 @@ public class VoteV1Controller {
     
     @GetMapping
     @Operation(summary = "Get vote list.", tags = "VoteV1Controller")
-    public ResponseEntity<List<VoteV1Dto>> findAll() {
+    public ResponseEntity<List<Vote>> findAll() {
         List<Vote> votes = service.findAll();
-
-        // List<VoteV1Dto> dtos = votes.stream()
-        //     .map(vote -> mapper.map(vote, VoteV1Dto.class))
-        //     .collect(Collectors.toList());
-
         return ResponseEntity.ok().body(votes);
     }
     
     @GetMapping("{id}")
     @Operation(summary = "Get a vote.", tags = "VoteV1Controller")
-    public ResponseEntity<VoteV1Dto> findById(@PathVariable UUID id) {
+    public ResponseEntity<Vote> findById(@PathVariable UUID id) {
         Vote vote = service.findById(id);
-
-        VoteV1Dto dto = mapper.map(vote, VoteV1Dto.class);
-
-        return ResponseEntity.ok().body(dto);
+        return ResponseEntity.ok().body(vote);
     }
 
     @PostMapping

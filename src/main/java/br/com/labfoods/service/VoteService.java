@@ -34,10 +34,10 @@ public class VoteService {
         LOGGER.info("Listing all votes");
     
         List<Vote> votes = repository.findAll();
-        // votes.forEach(vote -> {
-        //     User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-        //     vote.setCreatedBy(securityUser);
-        // });
+        votes.forEach(vote -> {
+            User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+            vote.setCreatedBy(securityUser);
+        });
     
         return Optional.ofNullable(votes)
             .orElseThrow(NotFoundException::new);
@@ -49,8 +49,8 @@ public class VoteService {
         Vote vote = repository.findById(id)
             .orElseThrow(NotFoundException::new);
 
-        // User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-        // vote.setCreatedBy(securityUser);
+        User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+        vote.setCreatedBy(securityUser);
 
         return vote;
     }

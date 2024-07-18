@@ -36,20 +36,16 @@ public class RecipeV1Controller {
     
     @GetMapping
     @Operation(summary = "Get recipe list.", tags = "RecipeV1Controller")
-    public ResponseEntity<List<RecipeV1Dto>> findAll() {
+    public ResponseEntity<List<Recipe>> findAll() {
         List<Recipe> recipes = service.findAll();
-        List<RecipeV1Dto> dtos = (List<RecipeV1Dto>) mapper.map(recipes, RecipeV1Dto.class);
-        return ResponseEntity.ok().body(dtos);
+        return ResponseEntity.ok().body(recipes);
     }
     
     @GetMapping("{id}")
     @Operation(summary = "Get a recipe.", tags = "RecipeV1Controller")
-    public ResponseEntity<RecipeV1Dto> findById(@PathVariable UUID id) {
+    public ResponseEntity<Recipe> findById(@PathVariable UUID id) {
         Recipe recipe = service.findById(id);
-        
-        RecipeV1Dto dto = mapper.map(recipe, RecipeV1Dto.class);
-
-        return ResponseEntity.ok().body(dto);
+        return ResponseEntity.ok().body(recipe);
     }
 
     @PostMapping
