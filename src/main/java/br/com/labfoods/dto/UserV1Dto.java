@@ -1,8 +1,8 @@
 package br.com.labfoods.dto;
 
+import java.util.UUID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.hibernate.validator.constraints.UUID;
 import br.com.labfoods.enums.Gender;
 import br.com.labfoods.model.UserAddress;
 import lombok.AllArgsConstructor;
