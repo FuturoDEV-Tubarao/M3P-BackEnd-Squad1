@@ -48,7 +48,6 @@ public class Recipe {
     @NotEmpty
     private String ingredients;
     
-    @Positive
     @NotNull
     private String preparationTime;
 
