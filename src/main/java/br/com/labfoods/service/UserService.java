@@ -41,30 +41,27 @@ public class UserService {
     public List<User> findAll() {
         LOGGER.info("Listing all users");
 
-        List<User> users = Optional
+        return Optional
             .ofNullable(repository.findAll())
+            .map(users -> 
+                users.stream()
+                    .map(user -> new User(user.getId(), user.getName(), user.isActive()))
+                    .collect(Collectors.toList()))
             .orElseThrow(NotFoundException::new);
-
-        return users.stream()
-            .map(user -> new User(user.getId(), user.getName(), user.isActive()))
-            .collect(Collectors.toList());
     }
 
     public User findById(UUID id) {
         LOGGER.info("Listing user by id: {}", id);
     
-        User user = repository.findById(id)
+        return repository.findById(id)
+            .map(user -> new User(user.getId(), user.getName(), user.isActive()))
             .orElseThrow(NotFoundException::new);
-        user.setPassword(null);
-
-        return user;
     }
     
     public User findByEmail(String email) {
         LOGGER.info("Listing user by email: {}", email);
 
-        return Optional.ofNullable(repository.findByEmail(email))
-            .orElseThrow(UnauthorizedException::new);
+        return Optional.ofNullable(repository.findByEmail(email)).orElseThrow(UnauthorizedException::new);
     }
 
     public void create(User user) {
@@ -147,6 +144,6 @@ public class UserService {
 
     public User userLogged() {
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return findById(user.getId());
+        return findByEmail(user.getUsername());
     }
 }
