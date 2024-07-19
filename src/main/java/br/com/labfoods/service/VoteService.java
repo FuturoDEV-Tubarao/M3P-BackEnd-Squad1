@@ -45,17 +45,18 @@ public class VoteService {
 
     public Vote findById(UUID id) {
         LOGGER.info("Listing vote by id: {}", id);
+    
+        return repository.findById(id)
+            .map(vote -> {
+                User securityUserVote = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+                vote.setCreatedBy(securityUserVote);
+        
+                User securityUserRecipe = new User(vote.getRecipe().getCreatedBy().getId(), vote.getRecipe().getCreatedBy().getName());
+                vote.getRecipe().setCreatedBy(securityUserRecipe);
 
-        Vote vote = repository.findById(id)
+                return vote;
+            })
             .orElseThrow(NotFoundException::new);
-
-        User securityUserVote = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-        vote.setCreatedBy(securityUserVote);
-
-        User securityUserRecipe = new User(vote.getRecipe().getCreatedBy().getId(), vote.getRecipe().getCreatedBy().getName());
-        vote.getRecipe().setCreatedBy(securityUserRecipe);
-
-        return vote;
     }
 
     public void create(Vote vote){
