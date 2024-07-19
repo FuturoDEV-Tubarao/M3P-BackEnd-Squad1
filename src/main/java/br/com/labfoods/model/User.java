@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import br.com.labfoods.enums.Gender;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,7 +47,6 @@ public class User {
 
     @Size(min = 11, max = 11)
     @Pattern(regexp = "^[0-9]{11}$", message = "O cpf deve ter 11 dígitos numéricos.")
-    @NotEmpty
     @Column(nullable = false, unique = true, updatable = false)
     private String cpf;
 
@@ -59,12 +59,11 @@ public class User {
     private String email;
 
     @Length(max = 255)
-    @NotEmpty
     private String password;
 
     private boolean active;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_address_id")
     private UserAddress userAddress;
 

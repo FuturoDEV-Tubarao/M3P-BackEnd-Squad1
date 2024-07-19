@@ -53,9 +53,10 @@ public class UserService {
     public User findById(UUID id) {
         LOGGER.info("Listing user by id: {}", id);
     
-        return repository.findById(id)
-            .map(user -> new User(user.getId(), user.getName(), user.isActive()))
-            .orElseThrow(NotFoundException::new);
+        User securityUser = repository.findById(id).orElseThrow(NotFoundException::new);
+        securityUser.setPassword(null);
+        
+        return securityUser;
     }
     
     public User findByEmail(String email) {
@@ -74,6 +75,7 @@ public class UserService {
 		user.setPassword(encodePassword(password));
 
 		repository.save(user);
+        user.setPassword(null);
     }
 
     public void update(User user){
@@ -86,6 +88,7 @@ public class UserService {
 		user.setPassword(encodePassword(password));
 
 		repository.save(user);
+        user.setPassword(null);
     }
 
     public void delete(UUID id) {
@@ -123,16 +126,18 @@ public class UserService {
 
     private void userValidation(User user){
 
+        //Não permite alterar o cpf
+        if(user.getId() != null){
+            User userChangedCpf = repository.findById(user.getId()).get();
+            if(userChangedCpf.getId() == user.getId() && !userChangedCpf.getCpf().equals(user.getCpf())) {
+                throw new BusinessException("cpf", "It is not allowed to change the CPF.");
+            }
+        }
+        
         //Não permite cadastrar usuários com o mesmo CPF; 
         User userUsedCpf = repository.findByCpf(user.getCpf());
         if(userUsedCpf != null && userUsedCpf.getId() != user.getId() && userUsedCpf.getCpf().equals(user.getCpf())) {
             throw new ConflictException("cpf");
-        }
-
-        //Não permite alterar o cpf
-        User userChangedCpf = repository.findByCpf(user.getCpf());
-        if(userChangedCpf != null && userChangedCpf.getId() == user.getId() && !userChangedCpf.getCpf().equals(user.getCpf())) {
-            throw new BusinessException("cpf", "It is not allowed to change the CPF.");
         }
 
         //Não permite cadastrar usuários com o mesmo email; 
