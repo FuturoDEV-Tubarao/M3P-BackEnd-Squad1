@@ -71,6 +71,7 @@ public class VoteService {
         voteValidation(vote);
 
         repository.save(vote);
+        vote.getCreatedBy().setPassword(null);
     }
 
     public void update(Vote vote){
@@ -85,6 +86,7 @@ public class VoteService {
         voteValidation(vote);
 
         repository.save(vote);
+        vote.getCreatedBy().setPassword(null);
     }
 
     public void delete(UUID id) {
