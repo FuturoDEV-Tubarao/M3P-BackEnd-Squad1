@@ -12,7 +12,6 @@ import br.com.labfoods.model.Recipe;
 import br.com.labfoods.model.User;
 import br.com.labfoods.repository.RecipeRepository;
 import br.com.labfoods.utils.exceptions.NotFoundException;
-import jakarta.transaction.Transactional;
 
 @Service
 public class RecipeService {
@@ -41,21 +40,23 @@ public class RecipeService {
             .orElseThrow(NotFoundException::new);
     }
 
-    @Transactional
     public Recipe findById(UUID id) {
         LOGGER.info("Listing recipe by id: {}", id);
-        Recipe recipe = repository.findById(id).orElseThrow(NotFoundException::new);
+        
+        return repository.findById(id)
+            .map(vote -> {
+                User securityUserVote = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+                vote.setCreatedBy(securityUserVote);
 
-        User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
-        recipe.setCreatedBy(securityUser);
-
-        return recipe;
+                return vote;
+            })
+            .orElseThrow(NotFoundException::new);
     }
 
     public void create(Recipe recipe){
-        recipe.setCreatedBy(userService.userLogged());
-
         LOGGER.info("Creating a recipe");
+
+        recipe.setCreatedBy(userService.userLogged());
         recipe.setCreatedDate(LocalDateTime.now());
 
         repository.save(recipe);
@@ -63,6 +64,7 @@ public class RecipeService {
 
     public void update(Recipe recipe){
         LOGGER.info("Updating a recipe");
+
         recipe.setLastModifiedDate(LocalDateTime.now());
     
         repository.save(recipe);
