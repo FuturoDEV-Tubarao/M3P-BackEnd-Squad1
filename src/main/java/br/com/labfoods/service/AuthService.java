@@ -5,11 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import br.com.labfoods.config.security.CustomUserDetails;
 import br.com.labfoods.config.service.JwtService;
 import br.com.labfoods.dto.SessionV1Dto;
-import br.com.labfoods.model.User;
 
 @Service
 public class AuthService {

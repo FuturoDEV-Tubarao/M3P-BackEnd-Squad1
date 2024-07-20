@@ -61,12 +61,11 @@ public class VoteService {
 
     public void create(Vote vote){
         LOGGER.info("Creating a vote");
-        vote.setCreatedBy(userService.userLogged());
 
-        Recipe recipe = recipeService.findById(vote.getRecipeId());
-        vote.setRecipe(recipe);
-       
+        vote.setCreatedBy(userService.userLogged());
         vote.setCreatedDate(LocalDateTime.now());
+
+        fetchRecipe(vote);
 
         voteValidation(vote);
 
@@ -76,12 +75,10 @@ public class VoteService {
 
     public void update(Vote vote){
         LOGGER.info("Updating a vote");
+
         vote.setCreatedBy(userService.userLogged());
-
-        Recipe recipe = recipeService.findById(vote.getRecipeId());
-        vote.setRecipe(recipe);
-
         vote.setLastModifiedDate(LocalDateTime.now());
+        fetchRecipe(vote);
 
         voteValidation(vote);
 
@@ -97,6 +94,13 @@ public class VoteService {
         }
 
         repository.deleteById(id);
+    }
+    
+    private void fetchRecipe(Vote vote) {
+        Recipe recipe = recipeService.findById(vote.getRecipeId());
+        User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
+        recipe.setCreatedBy(securityUser);
+        vote.setRecipe(recipe);
     }
 
     private void voteValidation(Vote vote){
