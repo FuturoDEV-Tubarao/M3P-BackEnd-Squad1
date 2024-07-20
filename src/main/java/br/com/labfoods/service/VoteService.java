@@ -64,7 +64,7 @@ public class VoteService {
 
         vote.setCreatedBy(userService.userLogged());
         vote.setCreatedDate(LocalDateTime.now());
-
+        
         fetchRecipe(vote);
 
         voteValidation(vote);
@@ -78,6 +78,7 @@ public class VoteService {
 
         vote.setCreatedBy(userService.userLogged());
         vote.setLastModifiedDate(LocalDateTime.now());
+
         fetchRecipe(vote);
 
         voteValidation(vote);
