@@ -21,7 +21,9 @@ public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
         "/api/labfoods/v1/auth",
-        "/swagger-ui/index.html"
+        "/swagger-ui/*",
+        "/api-docs/*",
+        "/api-docs"
     };
 
     private static final String[] AUTH_WHITELIST_GET = {
