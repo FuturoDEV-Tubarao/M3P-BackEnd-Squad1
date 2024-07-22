@@ -35,8 +35,8 @@ public class VoteService {
     
         List<Vote> votes = repository.findAll();
         votes.forEach(vote -> {
-            User securityUser = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-            vote.setCreatedBy(securityUser);
+            vote.setCreatedBy(getSecurityUser(vote));
+            vote.getRecipe().setCreatedBy(getSecurityUser(vote.getRecipe()));
         });
     
         return Optional.ofNullable(votes)
@@ -48,12 +48,8 @@ public class VoteService {
     
         return repository.findById(id)
             .map(vote -> {
-                User securityUserVote = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-                vote.setCreatedBy(securityUserVote);
-        
-                User securityUserRecipe = new User(vote.getRecipe().getCreatedBy().getId(), vote.getRecipe().getCreatedBy().getName());
-                vote.getRecipe().setCreatedBy(securityUserRecipe);
-
+                vote.setCreatedBy(getSecurityUser(vote));
+                vote.getRecipe().setCreatedBy(getSecurityUser(vote.getRecipe()));
                 return vote;
             })
             .orElseThrow(NotFoundException::new);
@@ -70,7 +66,8 @@ public class VoteService {
         voteValidation(vote);
 
         repository.save(vote);
-        vote.setCreatedBy(new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName()));
+        vote.setCreatedBy(getSecurityUser(vote));
+        vote.getRecipe().setCreatedBy(getSecurityUser(vote.getRecipe()));
     }
 
     public void update(Vote vote){
@@ -84,7 +81,8 @@ public class VoteService {
         voteValidation(vote);
 
         repository.save(vote);
-        vote.setCreatedBy(new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName()));
+        vote.setCreatedBy(getSecurityUser(vote));
+        vote.getRecipe().setCreatedBy(getSecurityUser(vote.getRecipe()));
     }
 
     public void delete(UUID id) {
@@ -114,5 +112,13 @@ public class VoteService {
         if (vote.getNote() % 0.5 != 0) {
             throw new BusinessException("note","Must be a multiple of 0.5");
         }
+    }
+
+    private User getSecurityUser(Vote vote){
+        return new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
+    }
+
+    private User getSecurityUser(Recipe recipe){
+        return new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
     }
 }
