@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.labfoods.model.Recipe;
 import br.com.labfoods.model.User;
+import br.com.labfoods.model.Vote;
 import br.com.labfoods.repository.RecipeRepository;
 import br.com.labfoods.utils.exceptions.NotFoundException;
 
@@ -30,12 +31,19 @@ public class RecipeService {
         LOGGER.info("Listing all recipes");
 
         List<Recipe> recipes = repository.findAll();
-
+        
         recipes.forEach(recipe -> {
             User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
             recipe.setCreatedBy(securityUser);
-        });
 
+            double voteSum = recipe.getVotes()
+                .stream()
+                .mapToDouble(Vote::getNote)
+                .sum();
+            double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
+            recipe.setVoteAvg(voteAvg);
+        });
+        
         return Optional.ofNullable(recipes)
             .orElseThrow(NotFoundException::new);
     }
@@ -44,11 +52,18 @@ public class RecipeService {
         LOGGER.info("Listing recipe by id: {}", id);
         
         return repository.findById(id)
-            .map(vote -> {
-                User securityUserVote = new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
-                vote.setCreatedBy(securityUserVote);
+            .map(recipe -> {
+                User securityUserVote = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
+                recipe.setCreatedBy(securityUserVote);
 
-                return vote;
+                double voteSum = recipe.getVotes()
+                    .stream()
+                    .mapToDouble(Vote::getNote)
+                    .sum();
+                double voteAvg = voteSum / recipe.getVotes().size();
+                recipe.setVoteAvg(voteAvg);
+
+                return recipe;
             })
             .orElseThrow(NotFoundException::new);
     }

@@ -74,6 +74,9 @@ public class Recipe {
     @OneToMany (mappedBy="recipe")
     private List<Vote> votes;
 
+    @Column
+    private double voteAvg;
+
     @ManyToOne
     @JoinColumn(name="created_by__contact_id")
     private User createdBy;
