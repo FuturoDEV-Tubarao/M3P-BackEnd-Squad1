@@ -16,9 +16,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -77,6 +77,7 @@ public class Recipe {
     private List<Vote> votes;
 
     @Transient
+    @DecimalMax(value = "99.99", message = "Vote average must have at most two decimal places")
     private double voteAvg;
 
     @ManyToOne
