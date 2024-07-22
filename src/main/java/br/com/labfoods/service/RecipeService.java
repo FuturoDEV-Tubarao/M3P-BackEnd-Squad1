@@ -1,5 +1,6 @@
 package br.com.labfoods.service;
 
+import java.util.Objects;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,12 +37,14 @@ public class RecipeService {
             User securityUser = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
             recipe.setCreatedBy(securityUser);
 
-            double voteSum = recipe.getVotes()
-                .stream()
-                .mapToDouble(Vote::getNote)
-                .sum();
-            double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
-            recipe.setVoteAvg(voteAvg);
+            if (recipe.getVotes() != null && !recipe.getVotes().isEmpty()){
+                double voteSum = recipe.getVotes()
+                    .stream()
+                    .mapToDouble(Vote::getNote)
+                    .sum();
+                double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
+                recipe.setVoteAvg(voteAvg);
+            }   
         });
         
         return Optional.ofNullable(recipes)
@@ -55,15 +58,17 @@ public class RecipeService {
             .map(recipe -> {
                 User securityUserVote = new User(recipe.getCreatedBy().getId(), recipe.getCreatedBy().getName());
                 recipe.setCreatedBy(securityUserVote);
-
-                double voteSum = recipe.getVotes()
-                    .stream()
-                    .mapToDouble(Vote::getNote)
-                    .sum();
-                double voteAvg = voteSum / recipe.getVotes().size();
-                recipe.setVoteAvg(voteAvg);
-
-                return recipe;
+        
+                if (recipe.getVotes() != null && !recipe.getVotes().isEmpty()){
+                    double voteSum = recipe.getVotes()
+                        .stream()
+                        .mapToDouble(Vote::getNote)
+                        .sum();
+                    double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
+                    recipe.setVoteAvg(voteAvg);
+                }
+                
+                return recipe; // Add this line
             })
             .orElseThrow(NotFoundException::new);
     }

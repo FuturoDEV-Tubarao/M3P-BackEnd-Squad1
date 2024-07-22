@@ -16,7 +16,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -74,7 +76,7 @@ public class Recipe {
     @OneToMany (mappedBy="recipe")
     private List<Vote> votes;
 
-    @Column
+    @Transient
     private double voteAvg;
 
     @ManyToOne
