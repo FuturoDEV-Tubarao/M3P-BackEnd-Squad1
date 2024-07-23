@@ -10,4 +10,6 @@ public interface VoteRepository extends JpaRepository<Vote, UUID>{
 
     boolean existsByCreatedById(UUID id);
 
+    void deleteByCreatedById(UUID id);
+
 }

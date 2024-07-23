@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.labfoods.dto.VoteV1Dto;
@@ -61,7 +60,7 @@ public class VoteV1Controller {
 
     @PutMapping("{id}")
     @Operation(summary = "Update a vote.", tags = "VoteV1Controller")
-    public ResponseEntity<Vote> update(@PathVariable UUID id, @RequestBody @Valid VoteV1Dto dto, @RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<Vote> update(@PathVariable UUID id, @RequestBody @Valid VoteV1Dto dto) {
         Vote vote = service.findById(id);
         vote = mapper.map(dto, Vote.class);
         vote.setId(id);
@@ -77,5 +76,5 @@ public class VoteV1Controller {
         service.delete(id);
         
         return ResponseEntity.noContent().build();
-    }    
+    } 
 }

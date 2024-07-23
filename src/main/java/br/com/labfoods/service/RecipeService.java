@@ -15,8 +15,10 @@ import br.com.labfoods.model.User;
 import br.com.labfoods.model.Vote;
 import br.com.labfoods.repository.RecipeRepository;
 import br.com.labfoods.repository.UserRepository;
+import br.com.labfoods.repository.VoteRepository;
 import br.com.labfoods.utils.exceptions.NotFoundException;
 import br.com.labfoods.utils.exceptions.UnauthorizedException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class RecipeService {
@@ -24,11 +26,13 @@ public class RecipeService {
 
     private RecipeRepository repository;
     private UserRepository userRepository;
+    private VoteRepository voteRepository;
 
     @Autowired
-    public RecipeService(RecipeRepository repository, UserRepository userRepository){
+    public RecipeService(RecipeRepository repository, UserRepository userRepository, VoteRepository voteRepository){
         this.repository = repository;
         this.userRepository = userRepository;
+        this.voteRepository = voteRepository;
     }
 
     public List<Recipe> findAll() {
@@ -102,6 +106,21 @@ public class RecipeService {
 
         repository.deleteById(id);
     }
+    
+    @Transactional
+    public void deleteMyAllRecipes() {
+        UUID userId = userLogged().getId();
+
+        LOGGER.info("Deleting all recipe by userId: {}", userId);
+
+        if (!repository.existsByCreatedById(userId)) {
+            throw new NotFoundException();
+        }
+
+        repository.deleteByCreatedById(userId);
+        voteRepository.deleteByCreatedById(userId);
+    }
+    
 
     public boolean existsByCreatedById(UUID id) {
        return repository.existsByCreatedById(id);

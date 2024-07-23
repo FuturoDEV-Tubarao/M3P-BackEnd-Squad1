@@ -74,5 +74,13 @@ public class RecipeV1Controller {
         service.delete(id);
         
         return ResponseEntity.noContent().build();
-    }    
+    }
+        
+    @DeleteMapping
+    @Operation(summary = "Deleting my all recipe.", tags = "VoteV1Controller")
+    public ResponseEntity<String> deleteMyAllRecipes() {
+        service.deleteMyAllRecipes();
+        
+        return ResponseEntity.noContent().build();
+    }  
 }

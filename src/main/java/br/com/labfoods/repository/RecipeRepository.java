@@ -17,4 +17,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, UUID>{
 
     boolean existsByCreatedById(UUID id);
 
+    void deleteByCreatedById(UUID id);
+
 }
