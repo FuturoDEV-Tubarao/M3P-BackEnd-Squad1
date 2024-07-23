@@ -40,7 +40,6 @@ public class Vote {
 
     @Min(0)
     @Max(10)
-    @Positive
     @NotNull
     private double note;
 
