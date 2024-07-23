@@ -25,12 +25,12 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private UserRepository repository;
-    // private RecipeService recipeService;
+    private RecipeService recipeService;
 
     @Autowired
-    public UserService(UserRepository repository){
+    public UserService(UserRepository repository, RecipeService recipeService){
         this.repository = repository;
-        // this.recipeService = recipeService;
+        this.recipeService = recipeService;
     }
 
 	public int countByActiveTrue() {
@@ -45,7 +45,7 @@ public class UserService {
             .ofNullable(repository.findAll())
             .map(users -> 
                 users.stream()
-                    .map(user -> new User(user.getId(), user.getName(), user.isActive()))
+                    .map(user -> getSecurityUser(user))
                     .collect(Collectors.toList()))
             .orElseThrow(NotFoundException::new);
     }
@@ -53,10 +53,10 @@ public class UserService {
     public User findById(UUID id) {
         LOGGER.info("Listing user by id: {}", id);
     
-        User securityUser = repository.findById(id).orElseThrow(NotFoundException::new);
-        securityUser.setPassword(null);
+        User user = repository.findById(id).orElseThrow(NotFoundException::new);
+        user.setPassword(null);
         
-        return securityUser;
+        return user;
     }
     
     public User findByEmail(String email) {
@@ -65,7 +65,7 @@ public class UserService {
         return Optional.ofNullable(repository.findByEmail(email)).orElseThrow(UnauthorizedException::new);
     }
 
-    public void create(User user) {
+    public User create(User user) {
         LOGGER.info("Creating a user");
         user.setCreatedDate(LocalDateTime.now());
         
@@ -75,10 +75,10 @@ public class UserService {
 		user.setPassword(encodePassword(password));
 
 		repository.save(user);
-        user.setPassword(null);
+        return getSecurityUser(user);
     }
 
-    public void update(User user){
+    public User update(User user){
         LOGGER.info("Updating a user");
         user.setLastModifiedDate(LocalDateTime.now());
     
@@ -88,7 +88,7 @@ public class UserService {
 		user.setPassword(encodePassword(password));
 
 		repository.save(user);
-        user.setPassword(null);
+        return getSecurityUser(user);
     }
 
     public void delete(UUID id) {
@@ -98,10 +98,10 @@ public class UserService {
             throw new NotFoundException();
         }
 
-        // // Não permite deletar usuário que tenha receitas cadastradas; 
-        // if(recipeService.existsByCreatedById(id)) {
-        //     throw new BusinessException("user","Can't delete someone with recipes associated");
-        // }
+        // Não permite deletar usuário que tenha receitas cadastradas; 
+        if(recipeService.existsByCreatedById(id)) {
+             throw new BusinessException("user","Can't delete someone with recipes associated");
+        }
 
         repository.deleteById(id);
     }
@@ -125,6 +125,10 @@ public class UserService {
     }
 
     private void userValidation(User user){
+
+        if(user.getPassword() == null){
+            throw new BusinessException("password", "Password is required.");
+        }
 
         //Não permite alterar o cpf
         if(user.getId() != null){
@@ -150,5 +154,9 @@ public class UserService {
     public User userLogged() {
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findByEmail(user.getUsername());
+    }
+
+    private User getSecurityUser(User user){
+        return new User(user.getId(), user.getName());
     }
 }
