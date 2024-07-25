@@ -1,8 +1,8 @@
-# LabFoods - M3P-FrontEnd-Squad1
+# LabFoods - M3P-BackEnd-Squad1
 
 # Sobre o projeto
 
-Este projeto é o frontend de uma aplicação web full-stack **-LabFoods-** que permite aos usuários se registrarem, postar receitas, receber avaliações em suas receitas e também avaliar receitas de outros usuários. O frontend é construído com React, TypeScript e styled-components. 
+Este projeto é o backend de uma aplicação web full-stack **-LabFoods-** que permite aos usuários se registrarem, postar receitas, receber avaliações em suas receitas e também avaliar receitas de outros usuários. O frontend é construído com Java, Spring framework e postgresql. 
 
 O projeto é desenvolvido para resolver o desafio final do modulo 3 do curso **Análise e Desenvolvimento Web**, curso oferecido pelo grupo **Senai - Lab365**.
 
@@ -14,7 +14,6 @@ O projeto é desenvolvido para resolver o desafio final do modulo 3 do curso **A
 - Jave 17
 - Spring Framework
 - Postgresql
-
 
  **Extra** 
  - ModelMapper
