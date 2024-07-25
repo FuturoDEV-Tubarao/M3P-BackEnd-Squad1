@@ -1,15 +1,38 @@
-# M3P-BackEnd-Squad1
-Repositório de back-end do projeto do módulo 3.
+# LabFoods - M3P-FrontEnd-Squad1
 
-#Swagger
+# Sobre o projeto
 
-## Acessar o Swagger
-http://localhost:8080/swagger-ui/index.html
+Este projeto é o frontend de uma aplicação web full-stack **-LabFoods-** que permite aos usuários se registrarem, postar receitas, receber avaliações em suas receitas e também avaliar receitas de outros usuários. O frontend é construído com React, TypeScript e styled-components. 
+
+O projeto é desenvolvido para resolver o desafio final do modulo 3 do curso **Análise e Desenvolvimento Web**, curso oferecido pelo grupo **Senai - Lab365**.
+
+## Link do Site
+- https://www.labfoods.com.br
+  
+# Tecnologias Utilizadas
+## Back end
+- Jave 17
+- Spring Framework
+- Postgresql
 
 
-#Dockerfile
+ **Extra** 
+ - ModelMapper
+ - Logback
+ - Lombok
+ - Token JWT
+ - Swagger
+ - Render
+ - Vercel
+ - Dockerfile
+   
+# Como executar o projeto
 
-## Commands
+```bash
+# clonar repositório
+git clone: https://github.com/FuturoDEV-Tubarao/M3P-BackEnd-Squad1
+
+## executar o Dockerfile
 
 ### Build project
 mvn package
@@ -23,40 +46,14 @@ docker tag labfoods nathalialanzendorf/labfoods:latest
 ### Pushing the Docker Image to Dockerhub
 docker push nathalialanzendorf/labfoods:latest 
 
-#DockerHub
+# acessar o Swagger
+http://localhost:8080/swagger-ui/index.html
 
-- https://hub.docker.com/r/nathalialanzendorf/labfoods/tags
+```
 
-#Deploy database
+# Autores
 
-##Render
+- Manoel Cavenati Fernandes Neto
+- Milena Clara Ribeiro Rizzi
+- Nathalia Lanzendorf
 
-Fonte: 
-
-
-#Deploy service
-
-## Render
-
-Fontes: 
- - https://hostingtutorials.dev/blog/free-spring-boot-host-with-render
- - https://medium.com/spring-boot/free-hosting-bliss-deploying-your-spring-boot-app-on-render-d0ebd9713b9d
-
-
-
-
-
- https://www.baeldung.com/spring-security-cors-preflight
-https://community.render.com/t/problem-with-fixing-cors-lost-header-issue/12544
-https://community.render.com/t/request-blocked-by-cors-policy/15918
-https://www.baeldung.com/spring-cors
-@Bean
-CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("*"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-}
