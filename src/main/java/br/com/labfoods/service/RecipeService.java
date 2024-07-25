@@ -73,7 +73,7 @@ public class RecipeService {
                     recipe.setVoteAvg(voteAvg);
                 }
                 
-                return recipe; // Add this line
+                return recipe;
             })
             .orElseThrow(NotFoundException::new);
     }
