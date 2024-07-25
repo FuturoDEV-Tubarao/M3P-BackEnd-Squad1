@@ -39,7 +39,7 @@ public class RecipeService {
         LOGGER.info("Listing all recipes");
 
         List<Recipe> recipes = repository.findAll();
-        
+
         recipes.forEach(recipe -> {
             recipe.setCreatedBy(getSecurityUser(recipe));
 
@@ -50,6 +50,7 @@ public class RecipeService {
                     .sum();
                 double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
                 recipe.setVoteAvg(voteAvg);
+                recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(recipe)));
             }   
         });
         
@@ -71,6 +72,7 @@ public class RecipeService {
                         .sum();
                     double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
                     recipe.setVoteAvg(voteAvg);
+                    recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(recipe)));
                 }
                 
                 return recipe;
