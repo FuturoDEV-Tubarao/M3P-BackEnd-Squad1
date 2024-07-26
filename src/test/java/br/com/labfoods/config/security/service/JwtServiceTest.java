@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import br.com.labfoods.config.service.JwtService;
-import java.util.Date;
-import java.util.Calendar;
 
 class JwtServiceTest {
 
@@ -36,8 +34,8 @@ class JwtServiceTest {
     void Should_ReturnUsername_When_ExtractingUsernameFromToken() {
         // Arrange
         String email = "email@labfoods.com.br";
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBsYWJmb29kcy5jb20uYnIiLCJpYXQiOjE3MjE5NTUwMzYsImV4cCI6MTcyMTk1NTkzNn0.HYrOrHr8rQGLtEHrHH3GouYPBayZj2ehBJWQET0im3I";
-
+        String token = jwtService.generateToken(email);
+        
         // Act
         String result = jwtService.extractUsername(token);
 
