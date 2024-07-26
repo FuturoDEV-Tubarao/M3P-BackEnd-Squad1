@@ -38,7 +38,7 @@ public class Vote {
     private UUID id;
 
     @Min(0)
-    @Max(10)
+    @Max(5)
     @NotNull
     private double note;
 
