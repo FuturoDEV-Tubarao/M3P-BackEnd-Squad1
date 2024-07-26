@@ -100,7 +100,7 @@ public class UserService {
 
         // Não permite deletar usuário que tenha receitas cadastradas; 
         if(recipeService.existsByCreatedById(id)) {
-             throw new BusinessException("user","Can't delete someone with recipes associated");
+             throw new BusinessException("user","Can't delete someone with recipes associated.");
         }
 
         repository.deleteById(id);
