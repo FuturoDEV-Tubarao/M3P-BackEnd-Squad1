@@ -48,8 +48,7 @@ public class RecipeService {
                     .stream()
                     .mapToDouble(Vote::getNote)
                     .sum();
-                double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
-                recipe.setVoteAvg(voteAvg);
+                recipe.setVoteAvg(voteSum / recipe.getVotes().size());
                 recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(vote)));
             }   
         });
