@@ -50,7 +50,7 @@ public class RecipeService {
                     .sum();
                 double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
                 recipe.setVoteAvg(voteAvg);
-                recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(recipe)));
+                recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(vote)));
             }   
         });
         
@@ -72,7 +72,7 @@ public class RecipeService {
                         .sum();
                     double voteAvg = (voteSum == 0 ? null : voteSum / recipe.getVotes().size());
                     recipe.setVoteAvg(voteAvg);
-                    recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(recipe)));
+                    recipe.getVotes().forEach(vote -> vote.setCreatedBy(getSecurityUser(vote)));
                 }
                 
                 return recipe;
@@ -131,6 +131,10 @@ public class RecipeService {
     public int countBy() {
         LOGGER.info("Counting active users");
         return repository.countBy();
+    }
+    
+    private User getSecurityUser(Vote vote){
+        return new User(vote.getCreatedBy().getId(), vote.getCreatedBy().getName());
     }
 
     private User getSecurityUser(Recipe recipe){
